@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_commontoast" default="compile.module.commontoast">
+  <dirname property="module.commontoast.basedir" file="${ant.file.module_commontoast}"/>
+  
+  <property name="module.jdk.home.commontoast" value="${jdk.home.android_4.2.2_platform}"/>
+  <property name="module.jdk.bin.commontoast" value="${jdk.bin.android_4.2.2_platform}"/>
+  <property name="module.jdk.classpath.commontoast" value="jdk.classpath.android_4.2.2_platform"/>
+  
+  <property name="compiler.args.commontoast" value="${compiler.args}"/>
+  
+  <property name="commontoast.output.dir" value="${module.commontoast.basedir}/../../StartupNews/out/production/CommonToast"/>
+  <property name="commontoast.testoutput.dir" value="${module.commontoast.basedir}/../../StartupNews/out/test/CommonToast"/>
+  
+  <path id="commontoast.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="commontoast.module.production.classpath">
+    <path refid="${module.jdk.classpath.commontoast}"/>
+  </path>
+  
+  <path id="commontoast.runtime.production.module.classpath">
+    <pathelement location="${commontoast.output.dir}"/>
+  </path>
+  
+  <path id="commontoast.module.classpath">
+    <path refid="${module.jdk.classpath.commontoast}"/>
+    <pathelement location="${commontoast.output.dir}"/>
+  </path>
+  
+  <path id="commontoast.runtime.module.classpath">
+    <pathelement location="${commontoast.testoutput.dir}"/>
+    <pathelement location="${commontoast.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.commontoast">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.commontoast">
+    <patternset refid="excluded.from.module.commontoast"/>
+  </patternset>
+  
+  <path id="commontoast.module.sourcepath">
+    <dirset dir="${module.commontoast.basedir}">
+      <include name="gen"/>
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.commontoast" depends="compile.module.commontoast.production,compile.module.commontoast.tests" description="Compile module CommonToast"/>
+  
+  <target name="compile.module.commontoast.production" depends="register.custom.compilers" description="Compile module CommonToast; production classes">
+    <mkdir dir="${commontoast.output.dir}"/>
+    <javac2 destdir="${commontoast.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.commontoast}/javac">
+      <compilerarg line="${compiler.args.commontoast}"/>
+      <bootclasspath refid="commontoast.module.bootclasspath"/>
+      <classpath refid="commontoast.module.production.classpath"/>
+      <src refid="commontoast.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.commontoast"/>
+    </javac2>
+    
+    <copy todir="${commontoast.output.dir}">
+      <fileset dir="${module.commontoast.basedir}/gen">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.commontoast.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.commontoast.tests" depends="register.custom.compilers,compile.module.commontoast.production" description="compile module CommonToast; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.commontoast" description="cleanup module">
+    <delete dir="${commontoast.output.dir}"/>
+    <delete dir="${commontoast.testoutput.dir}"/>
+  </target>
+</project>
