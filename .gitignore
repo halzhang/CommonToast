@@ -23,3 +23,7 @@ local.properties
 .idea
 *.iml
 module_*.xml
+
+#gradle
+.gradle/
+build/
